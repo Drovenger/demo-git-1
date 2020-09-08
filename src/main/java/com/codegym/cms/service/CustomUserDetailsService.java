@@ -9,6 +9,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,11 +23,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private CustomerRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Email " + username + " not found"));
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+        User user = userRepository.findByName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Name " + username + " not found"));
+        return new org.springframework.security.core.userdetails.User(user.getName(),passwordEncoder.encode(user.getPassword()) ,
                 getAuthorities(user));
     }
 

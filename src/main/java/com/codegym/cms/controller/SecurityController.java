@@ -35,7 +35,7 @@ public class SecurityController {
         return "admin";
     }
 
-    @RequestMapping(value = "/Access_Denied", method = RequestMethod.GET)
+    @RequestMapping(value = "/accessDenied", method = RequestMethod.GET)
     public String accessDeniedPage(ModelMap model) {
         model.addAttribute("user", getPrincipal());
         return "accessDenied";
@@ -45,5 +45,10 @@ public class SecurityController {
     public String dbaPage(ModelMap model) {
         model.addAttribute("user", getPrincipal());
         return "dba";
+    }
+
+    @GetMapping(value ="/logout")
+    public String logout(){
+        return "redirect:/";
     }
 }

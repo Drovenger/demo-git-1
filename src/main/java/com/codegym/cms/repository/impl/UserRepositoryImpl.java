@@ -36,6 +36,18 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User findByName(String name) {
+        TypedQuery<User> query = em.createQuery("select u from User u where u.name =: name",User.class);
+        query.setParameter("name", name);
+        try{
+            return query.getSingleResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public void save(User model) {
         if(model != null){
             em.merge(model);
